@@ -6,6 +6,7 @@ package file.to.json;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,9 +16,8 @@ public class App {
 
     public static void main(String[] args) {
 
-        // read file into json String
-        String json = "";
-        List<WhatWherePojo> list;
+        // first read from json file to list
+        List<WhatWherePojo> list = null;
 
         try {
             // create object mapper instance
@@ -25,16 +25,28 @@ public class App {
             
             list = Arrays.asList(mapper.readValue(Paths.get("app/src/main/assets/whatwhere.json").toFile(), WhatWherePojo[].class));
 
-
-            for (WhatWherePojo whatWherePojo : list) {
-                System.out.println(whatWherePojo.toString());
-            }
         
         } catch (Exception ex) {
             ex.printStackTrace();
         }
 
+        // convert list to Map<String,String>
+        Map<String,String> whatWhereMap = new HashMap<>();
+        
+        // copy from list to map
+        for (WhatWherePojo whatWherePojo : list) {
+            
+            whatWhereMap.put(whatWherePojo.getFromWhere(), whatWherePojo.getToWhere());
+        }
 
+        // print to stdOutput
+        System.out.println("");
+        System.out.println("Values collected in Hashmap: ");
+        for (String name: whatWhereMap.keySet()) {
+            String key = name.toString();
+            String value = whatWhereMap.get(name).toString();
+            System.out.println(key + " - " + value);
+        }
 
     }
 }
