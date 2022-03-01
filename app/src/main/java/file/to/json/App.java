@@ -3,12 +3,38 @@
  */
 package file.to.json;
 
+import java.io.IOException;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 public class App {
    
 
     public static void main(String[] args) {
 
+        // read file into json String
+        String json = "";
+        List<WhatWherePojo> list;
 
+        try {
+            // create object mapper instance
+            ObjectMapper mapper = new ObjectMapper();
+            
+            list = Arrays.asList(mapper.readValue(Paths.get("app/src/main/assets/whatwhere.json").toFile(), WhatWherePojo[].class));
+
+
+            for (WhatWherePojo whatWherePojo : list) {
+                System.out.println(whatWherePojo.toString());
+            }
         
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+
+
     }
 }
